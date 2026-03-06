@@ -6,47 +6,40 @@ void main() {
 
 const isRunningWithWasm = bool.fromEnvironment('dart.tool.dart2wasm');
 
-class MainApp extends StatefulWidget {
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
-
-  @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-  ThemeMode themeMode = ThemeMode.dark;
-
-  void toggleTheme() {
-    setState(() {
-      if (themeMode == ThemeMode.dark) {
-        themeMode = ThemeMode.light;
-      } else {
-        themeMode = ThemeMode.dark;
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          actions: [
-            IconButton(
-              onPressed: toggleTheme,
-              icon: Icon(
-                themeMode == ThemeMode.dark
-                    ? Icons.light_mode
-                    : Icons.dark_mode,
+          title: Text('Hello ${isRunningWithWasm ? 'WASM' : 'JavaScript'}'),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: EdgeInsets.all(8),
+              color: Color(0xFF333333),
+              child: Text('Lorem Ipsum'),
+            ),
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 5,
+                children: List.generate(100, (index) {
+                  if (index % 5 == 0) {
+                    return Center(child: Chip(label: Text('$index')));
+                  }
+                  return Center(child: FlutterLogo());
+                }),
               ),
             ),
           ],
         ),
-        body: Center(child: Text('Hello ${isRunningWithWasm ? 'WASM' : 'JS'}')),
       ),
-      theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      themeMode: themeMode,
+      themeMode: ThemeMode.dark,
     );
   }
 }
